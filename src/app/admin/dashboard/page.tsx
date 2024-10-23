@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 
 interface Speaker {
@@ -39,19 +40,6 @@ export default function AdminDashboard() {
     }
   }
 
-  const handleStatusChange = async (id: number, newStatus: string) => {
-    const { error } = await supabase
-      .from('speakers')
-      .update({ status: newStatus })
-      .eq('id', id)
-
-    if (error) {
-      console.error('Error updating speaker status:', error)
-    } else {
-      fetchSpeakers()
-    }
-  }
-
   const handleLogout = () => {
     localStorage.removeItem('adminLoggedIn')
     router.push('/admin/login')
@@ -79,24 +67,15 @@ export default function AdminDashboard() {
             </thead>
             <tbody className="divide-y divide-muted">
               {speakers.map((speaker) => (
-                <tr  key={speaker.id}>
+                <tr key={speaker.id}>
                   <td className="px-6 py-4 whitespace-nowrap">{speaker.name}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{speaker.expertise}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{speaker.submitted_by}</td>
                   <td className="px-6 py-4 whitespace-nowrap">{speaker.status}</td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <button
-                      onClick={() => handleStatusChange(speaker.id, 'approved')}
-                      className="bg-green-500 text-white px-3 py-1 rounded-md mr-2 hover:bg-green-600 transition-colors duration-200"
-                    >
-                      Approve
-                    </button>
-                    <button
-                      onClick={() => handleStatusChange(speaker.id, 'rejected')}
-                      className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition-colors duration-200"
-                    >
-                      Reject
-                    </button>
+                    <Link href={`/admin/speaker/${speaker.id}`} className="text-primary hover:text-primary/80 transition-colors duration-200">
+                      View Details
+                    </Link>
                   </td>
                 </tr>
               ))}
