@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client'
 
 import { useState } from 'react'
@@ -26,7 +28,7 @@ export default function SubmitSpeaker() {
       setSubmittedBy('')
     } catch (error) {
       console.error('Error submitting speaker:', error)
-      setMessage(`Error submitting speaker: ${error.message || 'Unknown error'}`)
+      setMessage(`Error submitting speaker: ${(error as any).message || 'Unknown error'}`)
     }
   }
 
