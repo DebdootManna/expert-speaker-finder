@@ -12,42 +12,25 @@ export default function SubmitSpeaker() {
   const [email, setEmail] = useState('')
   const [background, setBackground] = useState('')
   const [speakers, setSpeakers] = useState<any[]>([])
-  const [userEmail, setUserEmail] = useState('')
+  interface FacultyMember {
+    email: string;
+  }
+
+  const [facultyMember, setFacultyMember] = useState<FacultyMember | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const router = useRouter()
   const supabase = createClientComponentClient()
 
   useEffect(() => {
-    checkUser()
-    fetchSpeakers()
-  }, [])
-
-  const checkUser = async () => {
-    try {
-      const { data: { user }, error } = await supabase.auth.getUser()
-      if (error || !user) {
-        router.push('/admin/login')
-        return
-      }
-
-      const { data: facultyData } = await supabase
-        .from('faculty_members')
-        .select('*')
-        .eq('email', user.email)
-        .single()
-
-      if (!facultyData) {
-        router.push('/admin/login')
-        return
-      }
-
-      setUserEmail(user.email ?? '')
-      setIsLoading(false)
-    } catch (error) {
-      console.error('Error checking user:', error)
-      router.push('/admin/login')
+    const storedFacultyMember = localStorage.getItem('facultyMember')
+    if (!storedFacultyMember) {
+      router.push('/faculty/login')
+      return
     }
-  }
+    setFacultyMember(JSON.parse(storedFacultyMember))
+    fetchSpeakers()
+    setIsLoading(false)
+  }, [])
 
   const fetchSpeakers = async () => {
     try {
@@ -76,7 +59,7 @@ export default function SubmitSpeaker() {
             expertise,
             email,
             background,
-            submitted_by: userEmail,
+            submitted_by: facultyMember?.email || '',
             status: 'pending'
           }
         ])
@@ -98,20 +81,20 @@ export default function SubmitSpeaker() {
 
   if (isLoading) {
     return (
-      <main className="flex min-h-screen items-center justify-center">
+      <main className="flex min-h-screen items-center justify-center bg-gray-900 text-white">
         <div className="text-center">Loading...</div>
       </main>
     )
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-start p-24">
+    <main className="flex min-h-screen flex-col items-center justify-start p-24 bg-gray-900 text-white">
       <div className="w-full max-w-4xl space-y-8">
         <h1 className="text-4xl font-bold text-center">Speaker Submissions</h1>
         
         <div className="space-y-8">
           <div className="rounded-lg border border-gray-700 p-6">
-            <h2 className="text-2xl font-bold mb-4">Submitted Speakers</h2>
+            <h2 className="text-2xl font-bold mb-4">Recent Submitted Speakers</h2>
             <div className="overflow-x-auto">
               <table className="w-full border-collapse border border-gray-800">
                 <thead>

@@ -2,16 +2,22 @@ import Link from 'next/link'
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-background flex flex-col justify-center items-center p-4">
-      <h1 className="text-5xl font-bold mb-8 text-primary">Expert Speaker Finder</h1>
-      <div className="space-y-4 w-full max-w-md">
-        <Link href="/submit-speaker" className="bg-primary text-primary-foreground px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors duration-200 flex justify-center items-center text-lg font-semibold w-full">
+    <main className="flex min-h-screen flex-col items-center justify-center p-24 bg-gray-900 text-white">
+      <h1 className="text-4xl font-bold mb-8">Expert Speaker Finder</h1>
+      <div className="space-y-4 w-full max-w-xs">
+        <Link 
+          href="/faculty/login" 
+          className="block w-full bg-white text-gray-900 px-4 py-2 rounded-lg text-center hover:bg-gray-100 transition-colors"
+        >
           Submit a Speaker
         </Link>
-        <Link href="/admin/login" className="bg-secondary text-secondary-foreground px-6 py-3 rounded-lg hover:bg-secondary/90 transition-colors duration-200 flex justify-center items-center text-lg font-semibold w-full">
+        <Link 
+          href="/admin/login" 
+          className="block w-full bg-gray-800 text-white px-4 py-2 rounded-lg text-center hover:bg-gray-700 transition-colors"
+        >
           Admin Login
         </Link>
       </div>
-    </div>
+    </main>
   )
 }

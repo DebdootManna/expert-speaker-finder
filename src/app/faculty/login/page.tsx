@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useRouter } from 'next/navigation'
 
-export default function AdminLogin() {
+export default function FacultyLogin() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -17,7 +17,7 @@ export default function AdminLogin() {
     
     try {
       const { data, error } = await supabase
-        .from('admins')
+        .from('faculty_members')
         .select('*')
         .eq('email', email)
         .eq('password', password)
@@ -26,9 +26,9 @@ export default function AdminLogin() {
       if (error) throw error
 
       if (data) {
-        // Store admin info in localStorage (you might want to use a more secure method in production)
-        localStorage.setItem('adminUser', JSON.stringify(data))
-        router.push('/admin/dashboard')
+        // Store faculty info in localStorage (you might want to use a more secure method in production)
+        localStorage.setItem('facultyMember', JSON.stringify(data))
+        router.push('/faculty/submit-speaker')
       } else {
         setError('Invalid credentials')
       }
@@ -41,7 +41,7 @@ export default function AdminLogin() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-24 bg-gray-900 text-white">
       <div className="w-full max-w-md space-y-8">
-        <h1 className="text-4xl font-bold text-center">Admin Login</h1>
+        <h1 className="text-4xl font-bold text-center">Faculty Login</h1>
         
         {error && (
           <div className="bg-red-500/10 border border-red-500 text-red-500 px-4 py-2 rounded">
